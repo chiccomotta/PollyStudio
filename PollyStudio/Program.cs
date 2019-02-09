@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading;
+using System.Threading.Tasks;
 using Polly;
 
 namespace PollyStudio
@@ -11,7 +13,9 @@ namespace PollyStudio
         static void Main(string[] args)
         {   
             //WaitAndRetry();
-            Example1();
+            //Example1();
+            //Example2();
+            Example3();
 
             Console.ReadLine();
             return;
@@ -53,6 +57,11 @@ namespace PollyStudio
 
         public static void Example1()
         {
+            var context = new Polly.Context
+            {
+                {"retrycount ", 0}
+            };
+
             var policyResult = Policy
                 .Handle<Exception>()
                 .WaitAndRetry(new[]
@@ -78,6 +87,57 @@ namespace PollyStudio
             Console.WriteLine(policyResult.FinalException);
             Console.WriteLine(policyResult.ExceptionType);
             Console.WriteLine(policyResult.Result);
+        }
+
+        public static void Example2()
+        {
+            Policy retryPolicy = Policy
+                .Handle<Exception>()
+                .Retry(3,
+                    onRetry: (exception, retryCount, context) =>
+                    {
+                        // This policy might be re-used in several parts of the codebase, 
+                        // so we allow the logged message to be tailored.
+                        Console.WriteLine($"Retry {retryCount} of {context["Operation"]}, due to {exception.Message}.");
+                    });
+
+
+            retryPolicy.Execute(
+                action: context => GetCustomerDetailsAsync(1),
+                contextData: new Dictionary<string, object> { { "Operation", "GetCustomerDetails" } });
+
+
+        }
+
+        private static int GetCustomerDetailsAsync(int Id)
+        {
+            return 1;
+            throw new NotImplementedException();
+        }
+
+        public static void Example3()
+        {
+            var retryPolicy = Policy<string>
+                .HandleResult(msg => msg == "error")
+                .Retry(3,
+                    onRetry: (data, retryCount, context) =>
+                    {
+                        // This policy might be re-used in several parts of the codebase, 
+                        // so we allow the logged message to be tailored.
+                        Console.WriteLine($"Retry {retryCount} -- data {data.Result}.");
+                    });
+
+
+            retryPolicy.Execute(
+                action: context => GetMessage(1),
+                contextData: new Dictionary<string, object> { { "Operation", "GetCustomerDetails" } });
+
+
+        }
+
+        private static string GetMessage(int i)
+        {
+            return "error";
         }
     }
 }
