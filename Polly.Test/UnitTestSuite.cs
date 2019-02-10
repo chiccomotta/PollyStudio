@@ -1,6 +1,4 @@
 using System;
-using System.Diagnostics;
-using Polly.CircuitBreaker;
 using Xunit;
 
 namespace Polly.Test
@@ -10,18 +8,27 @@ namespace Polly.Test
         private static int counter = 0;
 
         [Fact]
-        public void RetryForever()
+        public void Retry5Times()
         {
-            Policy
-                .Handle<IndexOutOfRangeException>()
-                .RetryForever(exception => { counter++; })
-                .Execute(Foo);
+           var retries = 5;
+
+            try
+            {
+                Policy
+                    .Handle<IndexOutOfRangeException>()
+                    .Retry(retries, (exception, i, context) => { counter = i; })
+                    .Execute(FailedProcedure);
+            }
+            catch (Exception ex)
+            {
+                Assert.Equal(retries, counter);
+            }            
         }
 
-        public static void Foo()
+        // Always throws an exception
+        public static void FailedProcedure()
         {
-            if(counter != 100)
-                throw new IndexOutOfRangeException();
+            throw new IndexOutOfRangeException();
         }
     }
 }
