@@ -5,12 +5,11 @@ namespace Polly.Test
 {
     public class UnitTest1
     {
-        private static int counter = 0;
-
-        [Fact]
-        public void Retry5Times()
+        [Theory]
+        [InlineData(5)]
+        public void Retry5Times(int retries)
         {
-           var retries = 5;
+            int counter = 0;
 
             try
             {
