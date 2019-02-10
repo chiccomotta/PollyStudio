@@ -120,19 +120,16 @@ namespace PollyStudio
             var retryPolicy = Policy<string>
                 .HandleResult(msg => msg == "error")
                 .Retry(3,
-                    onRetry: (data, retryCount, context) =>
+                    onRetry: (result, retryCount, context) =>
                     {
                         // This policy might be re-used in several parts of the codebase, 
                         // so we allow the logged message to be tailored.
-                        Console.WriteLine($"Retry {retryCount} -- data {data.Result}.");
+                        Console.WriteLine($"Retry {retryCount} -- data {result.Result} for Operation {context["Operation"]}");
                     });
-
 
             retryPolicy.Execute(
                 action: context => GetMessage(1),
-                contextData: new Dictionary<string, object> { { "Operation", "GetCustomerDetails" } });
-
-
+                contextData: new Dictionary<string, object> { { "Operation", "GetMessage" } });
         }
 
         private static string GetMessage(int i)

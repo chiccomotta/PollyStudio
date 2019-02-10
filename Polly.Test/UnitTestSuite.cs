@@ -16,7 +16,10 @@ namespace Polly.Test
             {
                 Policy
                     .Handle<IndexOutOfRangeException>()
-                    .Retry(retries, (exception, i, context) => { counter = i; })
+                    .Retry(retries, (exception, i, context) =>
+                    {
+                        counter = i;
+                    })
                     .Execute(FailedProcedure);
             }
             catch (Exception ex)
