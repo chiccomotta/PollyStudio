@@ -1,19 +1,45 @@
 ﻿using Polly;
+using Polly.PolicyManager;
 using System;
 using System.Collections.Generic;
 
 namespace PollyStudio
 {
-    class Program
+    internal class Program
     {
         static void Main(string[] args)
-        {   
+        {
+            try
+            {
+                PolicyManager.WithFirewallPolicy(FakeComponent.FailedMethod,
+                    (exception, retryCount) =>
+                    {
+                        Console.WriteLine($"Retry: {retryCount} -- exception: {exception.Message}");
+                    });
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            try
+            {
+                PolicyManager.With3TimesPolicy(FakeComponent.FailedMethod,
+                    (exception, timeSpan) =>
+                    {
+                        Console.WriteLine($"timeSpan: {timeSpan} -- exception: {exception.Message}");
+                    });
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            
             //WaitAndRetry();
             //Example1();
             //Example2();
-            ExampleWithContext();
-
-            Console.ReadLine();            
+            //ExampleWithContext();
+            Console.ReadLine();
         }
 
         public static void WaitAndRetry()
