@@ -34,6 +34,23 @@ namespace PollyStudio
             {
                 Console.WriteLine(e.Message);
             }
+
+            try
+            {
+                PolicyManager.WithFirewallAndResultPolicy(FakeComponent.FailedMethodWithResult,
+                    (result) =>
+                    {
+                        Console.WriteLine(result);
+                    },
+                    (exception, retryCount) =>
+                    {
+                        Console.WriteLine($"Retry: {retryCount} -- exception: {exception.Message}");
+                    });
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
             
             //WaitAndRetry();
             //Example1();

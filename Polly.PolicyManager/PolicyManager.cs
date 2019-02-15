@@ -13,6 +13,16 @@ namespace Polly.PolicyManager
             policy.Execute(action);
         }
 
+        public static void WithFirewallAndResultPolicy(Func<string> action, Action<string> success, Action<Exception, int> error)
+        {
+            Policy policy = Policy
+                .Handle<Exception>()
+                .Retry(3, onRetry: error);
+
+            var result = policy.Execute(action);
+            success(result);
+        }
+
         public static void WithFirewallPolicy(Action action, Action<Exception, int, Context> callback)
         {
             Policy policy = Policy
