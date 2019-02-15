@@ -6,20 +6,20 @@ namespace Polly.PolicyManager
     {
         public static void WithFirewallPolicy(Action action, Action<Exception, int> callback)
         {
-            Policy firewallPolicy = Policy
+            Policy policy = Policy
                 .Handle<Exception>()
                 .Retry(3, onRetry: callback);
 
-            firewallPolicy.Execute(action);
+            policy.Execute(action);
         }
 
         public static void WithFirewallPolicy(Action action, Action<Exception, int, Context> callback)
         {
-            Policy firewallPolicy = Policy
+            Policy policy = Policy
                 .Handle<Exception>()
                 .Retry(3, onRetry: callback);
 
-            firewallPolicy.Execute(action);
+            policy.Execute(action);
         }
 
         public static void With3TimesPolicy(Action action, Action<Exception, TimeSpan> callback)
