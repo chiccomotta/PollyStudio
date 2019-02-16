@@ -1,7 +1,7 @@
 ﻿using Polly;
+using ResiliencePolicyManager;
 using System;
 using System.Collections.Generic;
-using static PoliciesManager.PolicyManager;
 
 namespace PollyStudio
 {
@@ -11,7 +11,7 @@ namespace PollyStudio
         {
             try
             {
-                With3TimesPolicy(FakeComponent.FailedMethod,
+                PolicyManager.With3TimesPolicy(FakeComponent.FailedMethod,
                     (exception, retryCount) =>
                     {
                         Console.WriteLine($"Retry: {retryCount} -- exception: {exception.Message}");
@@ -24,7 +24,7 @@ namespace PollyStudio
 
             try
             {
-                With3TimesPolicy(FakeComponent.FailedMethod,
+                PolicyManager.With3TimesPolicy(FakeComponent.FailedMethod,
                     (exception, timeSpan) =>
                     {
                         Console.WriteLine($"timeSpan: {timeSpan} -- exception: {exception.Message}");
@@ -37,7 +37,7 @@ namespace PollyStudio
 
             try
             {
-                WithFirewallAndResultPolicy(FakeComponent.FailedMethodWithResult,
+                PolicyManager.WithFirewallAndResultPolicy(FakeComponent.FailedMethodWithResult,
                     (result) =>
                     {
                         Console.WriteLine(result);

@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PollyStudio", "PollyStudio\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Polly.Test", "Polly.Test\Polly.Test.csproj", "{59BB3C1C-BB95-4207-919C-811D7CAF97AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Polly.PolicyManager", "Polly.PolicyManager\Polly.PolicyManager.csproj", "{B6D26DCB-C1F9-4CC8-B523-0F2D918BA1CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResiliencePolicyManager", "ResiliencePolicyManager\ResiliencePolicyManager.csproj", "{153F5060-843D-4DF4-9E2C-4766ADD6F172}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,10 @@ Global
 		{59BB3C1C-BB95-4207-919C-811D7CAF97AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{59BB3C1C-BB95-4207-919C-811D7CAF97AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{59BB3C1C-BB95-4207-919C-811D7CAF97AC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B6D26DCB-C1F9-4CC8-B523-0F2D918BA1CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B6D26DCB-C1F9-4CC8-B523-0F2D918BA1CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B6D26DCB-C1F9-4CC8-B523-0F2D918BA1CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B6D26DCB-C1F9-4CC8-B523-0F2D918BA1CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{153F5060-843D-4DF4-9E2C-4766ADD6F172}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{153F5060-843D-4DF4-9E2C-4766ADD6F172}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{153F5060-843D-4DF4-9E2C-4766ADD6F172}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{153F5060-843D-4DF4-9E2C-4766ADD6F172}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

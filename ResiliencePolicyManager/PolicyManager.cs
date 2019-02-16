@@ -1,7 +1,7 @@
 ﻿using System;
 using Polly;
 
-namespace PoliciesManager
+namespace ResiliencePolicyManager
 {
     public static class PolicyManager
     {
