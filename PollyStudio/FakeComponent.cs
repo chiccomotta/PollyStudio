@@ -13,9 +13,8 @@ namespace PollyStudio
             if (rand.Next(0, 2) == 0)
                 throw new DivideByZeroException();
 
-            Console.WriteLine("Method OK");
+            Console.WriteLine("METHOD OK");
         }
-
 
         public static string FailedMethodWithResult()
         {
@@ -24,7 +23,7 @@ namespace PollyStudio
             if (rand.Next(0, 2) == 0)
                 throw new DivideByZeroException();
 
-            return "Method called OK!";
+            return "Return method ok";
         }
     }
 }
