@@ -1,14 +1,19 @@
 ﻿using System;
+using Polly;
 
-namespace Polly.PolicyManager
+namespace PoliciesManager
 {
     public static class PolicyManager
     {
+        public const int Once = 1;
+        public const int Twice = 2;
+        public const int ThreeTimes = 3;
+
         public static void WithFirewallPolicy(Action action, Action<Exception, int> callback)
         {
             Policy policy = Policy
                 .Handle<Exception>()
-                .Retry(3, onRetry: callback);
+                .Retry(ThreeTimes, onRetry: callback);
 
             policy.Execute(action);
         }
@@ -17,7 +22,7 @@ namespace Polly.PolicyManager
         {
             Policy policy = Policy
                 .Handle<Exception>()
-                .Retry(3, onRetry: error);
+                .Retry(ThreeTimes, onRetry: error);
 
             var result = policy.Execute(action);
             success(result);
@@ -27,7 +32,7 @@ namespace Polly.PolicyManager
         {
             Policy policy = Policy
                 .Handle<Exception>()
-                .Retry(3, onRetry: callback);
+                .Retry(ThreeTimes, onRetry: callback);
 
             policy.Execute(action);
         }
