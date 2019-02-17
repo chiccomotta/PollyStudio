@@ -9,11 +9,11 @@ namespace ResiliencePolicyManager
         public const int Twice = 2;
         public const int ThreeTimes = 3;
 
-        public static void WithFirewallPolicy(Action action, Action<Exception, int> callback)
+        public static void WithFirewallPolicy(Action action, Action<Exception, int> error)
         {
             Policy policy = Policy
                 .Handle<Exception>()
-                .Retry(ThreeTimes, onRetry: callback);
+                .Retry(ThreeTimes, onRetry: error);
 
             policy.Execute(action);
         }
@@ -28,16 +28,16 @@ namespace ResiliencePolicyManager
             success(result);
         }
 
-        public static void WithFirewallPolicy(Action action, Action<Exception, int, Context> callback)
+        public static void WithFirewallPolicy(Action action, Action<Exception, int, Context> error)
         {
             Policy policy = Policy
                 .Handle<Exception>()
-                .Retry(ThreeTimes, onRetry: callback);
+                .Retry(ThreeTimes, onRetry: error);
 
             policy.Execute(action);
         }
 
-        public static void With3TimesPolicy(Action action, Action<Exception, TimeSpan> callback)
+        public static void With3TimesPolicy(Action action, Action<Exception, TimeSpan> error)
         {
             var policy = Policy
                 .Handle<Exception>()
@@ -46,7 +46,7 @@ namespace ResiliencePolicyManager
                     TimeSpan.FromSeconds(1),
                     TimeSpan.FromSeconds(1),
                     TimeSpan.FromSeconds(3)
-                }, onRetry: callback);
+                }, onRetry: error);
 
             policy.Execute(action);            
         }        
