@@ -22,37 +22,38 @@ namespace PollyStudio
                 Console.WriteLine(e.Message);
             }
 
-            try
-            {
-                PolicyManager.With3TimesPolicy(FakeComponent.FailedMethod,
-                    (exception, timeSpan) =>
-                    {
-                        Console.WriteLine($"timeSpan: {timeSpan} -- exception: {exception.Message}");
-                    });
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
 
-            try
-            {
-                PolicyManager.WithFirewallAndResultPolicy(FakeComponent.FailedMethodWithResult,
-                    (result) =>
-                    {
-                        Console.WriteLine(result);
-                    },
-                    (exception, retryCount) =>
-                    {
-                        Console.WriteLine($"Retry: {retryCount} -- exception: {exception.Message}");
-                    });
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
+            //try
+            //{
+            //    PolicyManager.With3TimesPolicy(FakeComponent.FailedMethod,
+            //        (exception, timeSpan) =>
+            //        {
+            //            Console.WriteLine($"timeSpan: {timeSpan} -- exception: {exception.Message}");
+            //        });
+            //}
+            //catch (Exception e)
+            //{
+            //    Console.WriteLine(e.Message);
+            //}
+
+            //try
+            //{
+            //    PolicyManager.WithFirewallAndResultPolicy(FakeComponent.FailedMethodWithResult,
+            //        (result) =>
+            //        {
+            //            Console.WriteLine(result);
+            //        },
+            //        (exception, retryCount) =>
+            //        {
+            //            Console.WriteLine($"Retry: {retryCount} -- exception: {exception.Message}");
+            //        });
+            //}
+            //catch (Exception e)
+            //{
+            //    Console.WriteLine(e.Message);
+            //}
             
-            //WaitAndRetry();
+            WaitAndRetry();
             //Example1();
             //Example2();
             //ExampleWithContext();
@@ -91,7 +92,6 @@ namespace PollyStudio
         {           
             throw new DivideByZeroException();
         }
-
 
         public static void Example1()
         {
