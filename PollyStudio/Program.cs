@@ -52,19 +52,23 @@ namespace PollyStudio
                 Console.WriteLine(e.Message);
             }
 
-            WaitAndRetry();
+            WaitAndRetryWithFallback();
             Example1();
             Example2();
             ExampleWithContext();
             Console.ReadLine();
         }
 
-        public static void WaitAndRetry()
+        public static void WaitAndRetryWithFallback()
         {
             Action action = Foo;
             int counter = 0;
 
-            var policy = Policy
+            var fallbackPolicy = Policy
+                .Handle<Exception>()
+                .Fallback(() => Console.WriteLine("THIS IS FALLBACK"));
+
+            var retryPolicy = Policy
                 .Handle<DivideByZeroException>()
                 .WaitAndRetry(new[]
                 {
@@ -78,7 +82,7 @@ namespace PollyStudio
 
             try
             {
-                policy.Execute(action);
+                fallbackPolicy.Wrap(retryPolicy).Execute(action);
             }
             catch (Exception ex)
             {
@@ -86,6 +90,8 @@ namespace PollyStudio
                 Console.ReadLine();
             }
         }
+
+        
 
         public static void Foo()
         {           
