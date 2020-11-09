@@ -50,5 +50,25 @@ namespace ResiliencePolicyManager
 
             policy.Execute(action);            
         }        
+
+        public static void With3TimesAndFallbackPolicy(Action action, Action<Exception, TimeSpan> error)
+        {
+            // Fallback policy
+            var fallbackPolicy = Policy
+                .Handle<Exception>()
+                .Fallback(() => Console.WriteLine("THIS IS FALLBACK"));
+
+            // Retry policy
+            var retryPolicy = Policy
+                .Handle<Exception>()
+                .WaitAndRetry(new[]
+                {
+                    TimeSpan.FromSeconds(1),
+                    TimeSpan.FromSeconds(2),
+                    TimeSpan.FromSeconds(3)
+                }, onRetry: error);
+
+            fallbackPolicy.Wrap(retryPolicy).Execute(action);
+        }        
     }
 }

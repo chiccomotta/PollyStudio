@@ -53,9 +53,9 @@ namespace PollyStudio
             }
 
             WaitAndRetryWithFallback();
-            Example1();
-            Example2();
-            ExampleWithContext();
+            //Example1();
+            //Example2();
+            //ExampleWithContext();
             Console.ReadLine();
         }
 
@@ -71,27 +71,18 @@ namespace PollyStudio
             var retryPolicy = Policy
                 .Handle<DivideByZeroException>()
                 .WaitAndRetry(new[]
-                {
-                    TimeSpan.FromSeconds(1),
-                    TimeSpan.FromSeconds(1),
-                    TimeSpan.FromSeconds(3)
-                }, (excpetion, timeSpan) =>
-                {
-                    Console.WriteLine($"Logging error... {excpetion.Message} - timespan {timeSpan}");
-                });
+                    {
+                        TimeSpan.FromSeconds(1),
+                        TimeSpan.FromSeconds(1),
+                        TimeSpan.FromSeconds(3)
+                    },
+                    (excpetion, timeSpan) =>
+                    {
+                        Console.WriteLine($"Logging error... {excpetion.Message} - timespan {timeSpan}");
+                    });
 
-            try
-            {
-                fallbackPolicy.Wrap(retryPolicy).Execute(action);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Last exception handling. Program terminated.");
-                Console.ReadLine();
-            }
+            fallbackPolicy.Wrap(retryPolicy).Execute(action);
         }
-
-        
 
         public static void Foo()
         {           
