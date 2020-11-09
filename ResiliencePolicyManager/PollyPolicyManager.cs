@@ -56,7 +56,7 @@ namespace ResiliencePolicyManager
             // Fallback policy
             var fallbackPolicy = Policy
                 .Handle<Exception>()
-                .Fallback(() => Console.WriteLine("THIS IS FALLBACK"));
+                .Fallback(() => Console.WriteLine("THIS IS A FALLBACK"));
 
             // Retry policy
             var retryPolicy = Policy
