@@ -11,7 +11,7 @@ namespace PollyStudio
         {
             try
             {
-                PolicyManager.With3TimesPolicy(FakeComponent.FailedMethod,
+                PollyPolicyManager.With3TimesPolicy(FakeComponent.FailedMethod,
                     (exception, retryCount) =>
                     {
                         Console.WriteLine($"Retry: {retryCount} -- exception: {exception.Message}");
@@ -22,41 +22,40 @@ namespace PollyStudio
                 Console.WriteLine(e.Message);
             }
 
+            try
+            {
+                PollyPolicyManager.With3TimesPolicy(FakeComponent.FailedMethod,
+                    (exception, timeSpan) =>
+                    {
+                        Console.WriteLine($"timeSpan: {timeSpan} -- exception: {exception.Message}");
+                    });
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
 
-            //try
-            //{
-            //    PolicyManager.With3TimesPolicy(FakeComponent.FailedMethod,
-            //        (exception, timeSpan) =>
-            //        {
-            //            Console.WriteLine($"timeSpan: {timeSpan} -- exception: {exception.Message}");
-            //        });
-            //}
-            //catch (Exception e)
-            //{
-            //    Console.WriteLine(e.Message);
-            //}
+            try
+            {
+                PollyPolicyManager.WithFirewallAndResultPolicy(FakeComponent.FailedMethodWithResult,
+                    (result) =>
+                    {
+                        Console.WriteLine(result);
+                    },
+                    (exception, retryCount) =>
+                    {
+                        Console.WriteLine($"Retry: {retryCount} -- exception: {exception.Message}");
+                    });
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
 
-            //try
-            //{
-            //    PolicyManager.WithFirewallAndResultPolicy(FakeComponent.FailedMethodWithResult,
-            //        (result) =>
-            //        {
-            //            Console.WriteLine(result);
-            //        },
-            //        (exception, retryCount) =>
-            //        {
-            //            Console.WriteLine($"Retry: {retryCount} -- exception: {exception.Message}");
-            //        });
-            //}
-            //catch (Exception e)
-            //{
-            //    Console.WriteLine(e.Message);
-            //}
-            
             WaitAndRetry();
-            //Example1();
-            //Example2();
-            //ExampleWithContext();
+            Example1();
+            Example2();
+            ExampleWithContext();
             Console.ReadLine();
         }
 
@@ -133,7 +132,6 @@ namespace PollyStudio
                         // so we allow the logged message to be tailored.
                         Console.WriteLine($"Retry {retryCount} of {context["Operation"]}, due to {exception.Message}.");
                     });
-
 
             retryPolicy.Execute(
                 action: context => GetCustomerDetailsAsync(1),

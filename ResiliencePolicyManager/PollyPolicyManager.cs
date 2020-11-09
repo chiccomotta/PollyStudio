@@ -3,7 +3,7 @@ using Polly;
 
 namespace ResiliencePolicyManager
 {
-    public static class PolicyManager
+    public static class PollyPolicyManager
     {
         public const int Once = 1;
         public const int Twice = 2;
