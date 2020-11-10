@@ -9,48 +9,48 @@ namespace PollyStudio
     {
         static void Main(string[] args)
         {
-            try
-            {
-                PollyPolicyManager.With3TimesPolicy(FakeComponent.FailedMethod,
-                    (exception, retryCount) =>
-                    {
-                        Console.WriteLine($"Retry: {retryCount} -- exception: {exception.Message}");
-                    });
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
+            //try
+            //{
+            //    PollyPolicyManager.With3TimesPolicy(FakeComponent.FailedMethod,
+            //        (exception, retryCount) =>
+            //        {
+            //            Console.WriteLine($"Retry: {retryCount} -- exception: {exception.Message}");
+            //        });
+            //}
+            //catch (Exception e)
+            //{
+            //    Console.WriteLine(e.Message);
+            //}
 
-            try
-            {
-                PollyPolicyManager.With3TimesPolicy(FakeComponent.FailedMethod,
-                    (exception, timeSpan) =>
-                    {
-                        Console.WriteLine($"timeSpan: {timeSpan} -- exception: {exception.Message}");
-                    });
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
+            //try
+            //{
+            //    PollyPolicyManager.With3TimesPolicy(FakeComponent.FailedMethod,
+            //        (exception, timeSpan) =>
+            //        {
+            //            Console.WriteLine($"timeSpan: {timeSpan} -- exception: {exception.Message}");
+            //        });
+            //}
+            //catch (Exception e)
+            //{
+            //    Console.WriteLine(e.Message);
+            //}
 
-            try
-            {
-                PollyPolicyManager.WithFirewallAndResultPolicy(FakeComponent.FailedMethodWithResult,
-                    (result) =>
-                    {
-                        Console.WriteLine(result);
-                    },
-                    (exception, retryCount) =>
-                    {
-                        Console.WriteLine($"Retry: {retryCount} -- exception: {exception.Message}");
-                    });
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
+            //try
+            //{
+            //    PollyPolicyManager.WithFirewallAndResultPolicy(FakeComponent.FailedMethodWithResult,
+            //        (result) =>
+            //        {
+            //            Console.WriteLine(result);
+            //        },
+            //        (exception, retryCount) =>
+            //        {
+            //            Console.WriteLine($"Retry: {retryCount} -- exception: {exception.Message}");
+            //        });
+            //}
+            //catch (Exception e)
+            //{
+            //    Console.WriteLine(e.Message);
+            //}
 
             WaitAndRetryWithFallback();
             //Example1();
@@ -61,14 +61,18 @@ namespace PollyStudio
 
         public static void WaitAndRetryWithFallback()
         {
-            Action action = Foo;
+            Func<int> action = FooInt;
             int counter = 0;
 
-            var fallbackPolicy = Policy
+            var fallbackPolicy = Policy<int>
                 .Handle<Exception>()
-                .Fallback(() => Console.WriteLine("THIS IS FALLBACK"));
+                .Fallback<int>(cancellationToken =>
+                {
+                    Console.WriteLine("THIS IS FALLBACK");
+                    return 0;
+                });
 
-            var retryPolicy = Policy
+            var retryPolicy = Policy<int>
                 .Handle<DivideByZeroException>()
                 .WaitAndRetry(new[]
                     {
@@ -76,18 +80,26 @@ namespace PollyStudio
                         TimeSpan.FromSeconds(1),
                         TimeSpan.FromSeconds(3)
                     },
-                    (excpetion, timeSpan) =>
+                    (res, timeSpan, context) =>
                     {
-                        Console.WriteLine($"Logging error... {excpetion.Message} - timespan {timeSpan}");
+                        //Console.WriteLine($"Logging error... {excpetion.Message} - timespan {timeSpan}");
+                        Console.WriteLine($"result is {res}");
                     });
 
-            fallbackPolicy.Wrap(retryPolicy).Execute(action);
+            var result = fallbackPolicy.Wrap(retryPolicy).Execute(action);
         }
 
         public static void Foo()
         {           
             throw new DivideByZeroException();
         }
+
+        public static int FooInt()
+        {
+            throw new DivideByZeroException();
+            return 100;
+        }
+
 
         public static void Example1()
         {
