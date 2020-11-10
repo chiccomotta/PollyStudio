@@ -9,53 +9,20 @@ namespace PollyStudio
     {
         static void Main(string[] args)
         {
-            //try
-            //{
-            //    PollyPolicyManager.With3TimesPolicy(FakeComponent.FailedMethod,
-            //        (exception, retryCount) =>
-            //        {
-            //            Console.WriteLine($"Retry: {retryCount} -- exception: {exception.Message}");
-            //        });
-            //}
-            //catch (Exception e)
-            //{
-            //    Console.WriteLine(e.Message);
-            //}
-
-            //try
-            //{
-            //    PollyPolicyManager.With3TimesPolicy(FakeComponent.FailedMethod,
-            //        (exception, timeSpan) =>
-            //        {
-            //            Console.WriteLine($"timeSpan: {timeSpan} -- exception: {exception.Message}");
-            //        });
-            //}
-            //catch (Exception e)
-            //{
-            //    Console.WriteLine(e.Message);
-            //}
-
-            //try
-            //{
-            //    PollyPolicyManager.WithFirewallAndResultPolicy(FakeComponent.FailedMethodWithResult,
-            //        (result) =>
-            //        {
-            //            Console.WriteLine(result);
-            //        },
-            //        (exception, retryCount) =>
-            //        {
-            //            Console.WriteLine($"Retry: {retryCount} -- exception: {exception.Message}");
-            //        });
-            //}
-            //catch (Exception e)
-            //{
-            //    Console.WriteLine(e.Message);
-            //}
+            PollyPolicyManager.With3TimesAndFallbackPolicy(FakeComponent.FailedMethodWithResult,
+                (result) =>
+                {
+                    Console.WriteLine(result);
+                },
+                (exception, retryCount) =>
+                {
+                    Console.WriteLine($"Retry: {retryCount} -- exception: {exception.Message}");
+                });
 
             WaitAndRetryWithFallback();
-            //Example1();
-            //Example2();
-            //ExampleWithContext();
+            Example1();
+            Example2();
+            ExampleWithContext();
             Console.ReadLine();
         }
 

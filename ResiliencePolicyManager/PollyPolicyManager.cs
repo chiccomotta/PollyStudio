@@ -51,12 +51,16 @@ namespace ResiliencePolicyManager
             policy.Execute(action);            
         }        
 
-        public static void With3TimesAndFallbackPolicy(Action action, Action<Exception, TimeSpan> error)
+        public static void With3TimesAndFallbackPolicy(Func<string> action, Action<string> success, Action<Exception, TimeSpan> error)
         {
             // Fallback policy
-            var fallbackPolicy = Policy
+            var fallbackPolicy = Policy<string>
                 .Handle<Exception>()
-                .Fallback(() => Console.WriteLine("THIS IS A FALLBACK"));
+                .Fallback(() =>
+                {
+                    Console.WriteLine("THIS IS A FALLBACK");
+                    return "error";
+                });
 
             // Retry policy
             var retryPolicy = Policy
@@ -68,7 +72,8 @@ namespace ResiliencePolicyManager
                     TimeSpan.FromSeconds(3)
                 }, onRetry: error);
 
-            fallbackPolicy.Wrap(retryPolicy).Execute(action);
+            var result = fallbackPolicy.Wrap(retryPolicy).Execute(action);
+            success(result);
         }        
     }
 }
