@@ -72,7 +72,7 @@ namespace PollyStudio
                     return 0;
                 });
 
-            var retryPolicy = Policy<int>
+            var retryPolicy = Policy
                 .Handle<DivideByZeroException>()
                 .WaitAndRetry(new[]
                     {
