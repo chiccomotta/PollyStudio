@@ -9,6 +9,8 @@ namespace PollyStudio
     {
         static void Main(string[] args)
         {
+            //TestClass.TestTaskException();
+
             PollyPolicyManager.With3TimesAndFallbackPolicy(FakeComponent.FailedMethodWithResult,
                 (result) =>
                 {
