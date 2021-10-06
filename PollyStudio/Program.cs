@@ -2,6 +2,7 @@
 using ResiliencePolicyManager;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace PollyStudio
 {
@@ -10,6 +11,13 @@ namespace PollyStudio
         static void Main(string[] args)
         {
             //TaskExceptionTest.TestTaskException();
+            var res = TupleExample.Example().Result;
+
+            if (res.IsSuccess)
+            {
+                Console.WriteLine(res.message);
+                res.numbers.ToList().ForEach(Console.WriteLine);
+            }
 
             PollyPolicyManager.With3TimesAndFallbackPolicy(FakeComponent.FailedMethodWithResult,
                 (result) =>
