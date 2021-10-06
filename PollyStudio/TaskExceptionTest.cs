@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace PollyStudio
 {
-    internal class TestClass
+    internal class TaskExceptionTest
     {
         public static void TestTaskException()
         {
