@@ -10,7 +10,7 @@ namespace PollyStudio
     {
         static void Main(string[] args)
         {
-            //TaskExceptionTest.TestTaskException();
+            TaskExceptionTest.TestTaskException();
             var res = TupleExample.Example().Result;
 
             if (res.IsSuccess)
