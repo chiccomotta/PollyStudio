@@ -19,6 +19,8 @@ namespace PollyStudio
                 res.numbers.ToList().ForEach(Console.WriteLine);
             }
 
+            Console.ReadKey();
+            return;
             PollyPolicyManager.With3TimesAndFallbackPolicy(FakeComponent.FailedMethodWithResult,
                 (result) =>
                 {
